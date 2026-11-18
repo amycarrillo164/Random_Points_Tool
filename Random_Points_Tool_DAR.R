@@ -27,9 +27,7 @@ library(spatstat)
 #==========================================================================================================#
 # C. Data
 ## User path (substitute with computer user)
-getwd()
-user <- "C:/Users/Amy/Donovan Lab Dropbox/Donovan Lab Team Folder"
-my_directory <- file.path(user, "Donovan_Lab_GIS/Partner-projects/DAR_RandomPointsTool_Tutorial")
+my_directory <- "C:/Users/Amy/Random_Points_Tool_Tutorial"
 setwd(my_directory)
 
 ## Strata

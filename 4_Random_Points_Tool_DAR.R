@@ -1,6 +1,7 @@
 # Title: Random Point Tool
-# Date: 11/10/26
+# Date: 11-18-2026
 # Author: Amy Carrillo
+# Version: 1.2
 
 #==========================================================================================================#
 # A. Background   -----------------------------------------------------------------------------------------
@@ -27,17 +28,14 @@ library(spatstat)
 #==========================================================================================================#
 # C. Data
 ## User path (substitute with computer user)
-my_directory <- "C:/Users/Amy/Random_Points_Tool_Tutorial"
+getwd()
+user <- "C:/Users/Amy/Donovan Lab Dropbox/Donovan Lab Team Folder"
+my_directory <- file.path(user, "Donovan_Lab_Projects/DAR_oahu_power")
 setwd(my_directory)
 
 ## Strata
-oahu_strata_knownHardBottom <- st_read(
-  "raw_data/OahuEcoRegionsStrata_HIMARC_v1.1_2026.gpkg", 
-  layer = "Oahu_knownhardbottom_30m")
-
-oahu_strata_unknown <- st_read(
-  "raw_data/OahuEcoRegionsStrata_HIMARC_v1.1_2026.gpkg", 
-  layer = "Oahu_unknown_30m")
+oahu_strata_knownHardBottom <- st_read("scratch_data/scratch_data_1.2.gpkg", layer = "3_Oahu_knownhardbottom_30m")
+oahu_strata_unknown <- st_read("scratch_data/scratch_data_1.2.gpkg", layer = "3_Oahu_unknown_30m")
 
 #==========================================================================================================#
 # D. Methods
@@ -125,7 +123,7 @@ generate_random_points(
   min_distance     = 100,               # minimum distance in meters
   crs              = 26904,
   type_known       = "known",
-  out_gpkg         = "scratch_data/randompoints_known_v1.1_2026.gpkg")  # change to your output gpkg
+  out_gpkg         = "scratch_data/randompoints_known_v1.2_2026.gpkg")  # change to your output gpkg
 
 generate_random_points(
   layer            = oahu_strata_unknown,
@@ -137,7 +135,7 @@ generate_random_points(
   min_distance     = 100,              # minimum distance in meters
   crs              = 26904,
   type_known       = "unknown",
-  out_gpkg         = "scratch_data/randompoints_unknown_v1.1_2026.gpkg")  # change to your output gpkg
+  out_gpkg         = "scratch_data/randompoints_unknown_v1.2_2026.gpkg")  # change to your output gpkg
 
 #==========================================================================================================#
 # Part II: Priority Filtering Tool - Function
@@ -218,21 +216,21 @@ filter_points_by_priority <- function(in_gpkg, priority_order, class_field  = "c
 
 ## Run Function
 accepted_pts_known <- filter_points_by_priority(
-  in_gpkg        = "scratch_data/Oahu_v1.1_Points_Known_2026.gpkg",
+  in_gpkg        = "scratch_data/randompoints_known_v1.2_2026.gpkg",
   priority_order = c("mid_complex", "shallow_complex", "mid_smooth", "shallow_smooth", "deep_complex", "deep_smooth"),
   class_field    = "combined_class",
   min_distance   = 100,
-  out_gpkg       = "output_data/Known/Oahu_v1.1_Points_Priority_Known_2026.gpkg",  # change to your output gpkg
-  out_layer      = "Oahu_v1.1_Known_Points_Priority"
+  out_gpkg       = "output_data/Known_1.2/Oahu_v1.2_Points_Priority_Known_2026.gpkg",  # change to your output gpkg
+  out_layer      = "Oahu_v1.2_Known_Points_Priority"
 )
 
 accepted_pts_unknown <- filter_points_by_priority(
-  in_gpkg        = "scratch_data/Oahu_v1.1_Points_Unknown_2026.gpkg",
+  in_gpkg        = "scratch_data/randompoints_unknown_v1.2_2026.gpkg",
   priority_order = c("mid_complex", "shallow_complex", "mid_smooth", "shallow_smooth", "deep_complex", "deep_smooth"),
   class_field    = "combined_class",
   min_distance   = 100,
-  out_gpkg       = "output_data/Unknown/Oahu_v1.1_Points_Priority_Unknown_2026.gpkg",  # change to your output gpkg
-  out_layer      = "Oahu_v1.1_Unknown_Points_Priority"
+  out_gpkg       = "output_data/Unknown_1.2/Oahu_v1.2_Points_Priority_Unknown_2026.gpkg",  # change to your output gpkg
+  out_layer      = "Oahu_v1.2_Unknown_Points_Priority"
 )
 
 #==========================================================================================================#
@@ -279,12 +277,12 @@ export_points_by_site <- function(pts, file_prefix, out_dir) {
 ## 3.02 Run Function
 ### Known Strata 
 export_points_by_site(
-  out_dir     = "output_data/Known",
+  out_dir     = "output_data/Known_1.2",
   pts         = accepted_pts_known, 
-  file_prefix = "Oahu_v1.1_Points_Priority_Known")
+  file_prefix = "Oahu_v1.2_Points_Priority_Known")
 
 ### Unknown Strata
 export_points_by_site(
-  out_dir     = "output_data/Unknown",
+  out_dir     = "output_data/Unknown_1.2",
   pts         = accepted_pts_unknown, 
-  file_prefix = "Oahu_v1.1_Points_Priority_Unknown")
+  file_prefix = "Oahu_v1.2_Points_Priority_Unknown")

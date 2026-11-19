@@ -123,7 +123,7 @@ generate_random_points(
   min_distance     = 100,               # minimum distance in meters
   crs              = 26904,
   type_known       = "known",
-  out_gpkg         = "scratch_data/randompoints_known_v1.2_2026.gpkg")  # change to your output gpkg
+  out_gpkg         = "scratch_data/Oahu_v1.2_Points_Known_2026.gpkg")  # change to your output gpkg
 
 generate_random_points(
   layer            = oahu_strata_unknown,
@@ -135,7 +135,7 @@ generate_random_points(
   min_distance     = 100,              # minimum distance in meters
   crs              = 26904,
   type_known       = "unknown",
-  out_gpkg         = "scratch_data/randompoints_unknown_v1.2_2026.gpkg")  # change to your output gpkg
+  out_gpkg         = "scratch_data/Oahu_v1.2_Points_Unknown_2026.gpkg")  # change to your output gpkg
 
 #==========================================================================================================#
 # Part II: Priority Filtering Tool - Function
@@ -216,7 +216,7 @@ filter_points_by_priority <- function(in_gpkg, priority_order, class_field  = "c
 
 ## Run Function
 accepted_pts_known <- filter_points_by_priority(
-  in_gpkg        = "scratch_data/randompoints_known_v1.2_2026.gpkg",
+  in_gpkg        = "scratch_data/Oahu_v1.2_Points_Known_2026.gpkg",
   priority_order = c("mid_complex", "shallow_complex", "mid_smooth", "shallow_smooth", "deep_complex", "deep_smooth"),
   class_field    = "combined_class",
   min_distance   = 100,
@@ -225,7 +225,7 @@ accepted_pts_known <- filter_points_by_priority(
 )
 
 accepted_pts_unknown <- filter_points_by_priority(
-  in_gpkg        = "scratch_data/randompoints_unknown_v1.2_2026.gpkg",
+  in_gpkg        = "scratch_data/Oahu_v1.2_Points_Unknown_2026.gpkg",
   priority_order = c("mid_complex", "shallow_complex", "mid_smooth", "shallow_smooth", "deep_complex", "deep_smooth"),
   class_field    = "combined_class",
   min_distance   = 100,

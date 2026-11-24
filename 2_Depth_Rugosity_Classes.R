@@ -1,38 +1,29 @@
-# Title: DAR Oahu Power - Depth and Rugosity Classes / Strata - 2025
+# Title: 2_Depth_Rugosity_Classes.R
 # Date: 11-18-2026
 # Author: Amy Carrillo
 # Version: 1.2
 
 #==========================================================================================================#
-# Outline
-# A. Background
-# B. Packages/Libraries
-# C. Data
-# D. Methods
-#  I.   Create Groups for Depth
-#  II.  Create Groups for Rugosity
-#  III. Depth and Rugosity Categories Polygon Layer
-#  IV.  Remove soft bottom
-
-#==========================================================================================================#
 # A. Background   -----------------------------------------------------------------------------------------
 #==========================================================================================================#
-## - Classifies Oahu into strata based on depth and rugosity classes.
+## Classifies Oahu into strata based on depth and rugosity classes.
 
-## Final Output Layer:
-## oahu_dar_management_classified_polys_NoSoft.shp
+## Depth Classes:
+### - Shallow (7 - 30ft)
+### - Mid (30 - 60ft)
+## - Deep (>60ft)
+
+## Rugosity Classes
+### - Smooth (0-20)
+### - Complex (>20)
 
 #==========================================================================================================#
 # B. Packages/Libraries ---------------------------------------------------------------------------------
 #==========================================================================================================#
 library(sf)
 library(dplyr)
-library(raster)
 library(terra)
-library(tidyr)
-library(stringr)
 library(mapview)
-library(exactextractr)
 
 #==========================================================================================================#
 # C. Data   -----------------------------------------------------------------------------------------------
@@ -78,8 +69,6 @@ depth_ft <- depth * 3.28084
 depth_reclass_matrix <- matrix(c(
   -Inf, -60, 3,    # deep
   -60, -30, 2,     # mid
-#  -30, 0, 1),        # shallow
-### Update: Removing areas shallower than 7ft from surveys
    -30, -7, 1),        # shallow
   ncol = 3, byrow = TRUE)
 

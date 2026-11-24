@@ -1,15 +1,15 @@
-# Title: DAR Oahu Power - Extract Known and Unknowns - 2026
+# Title: 3_Extract_Oahu_Unknown_Known_Classes
 # Date: 11-18-2026
 # Author: Amy Carrillo
 # Version: 1.2
 
 #==========================================================================================================#
 # A. Background   -----------------------------------------------------------------------------------------
-## In "2_depth_and_rogosity_classes" we only remove "soft" - sand and mud. However, this leads to the inclusion of "unknowns."
-## For monitoring purposes, We need to know which areas exactly are hard bottom.
+## In "2_depth_and_rogosity_classes.R" we remove "soft" - sand and mud.
+## In the NCCOS dataset, there's a good amount of areas of "unknowns."
+## For monitoring purposes, We need to know which areas exactly are hard bottom vs. unknown.
 
-# Purpose
-## To build two layers: 
+## We build two layers: 
 ## 1) Known hard-bottom with the appropriate substrata within the 30m depth contour
 ## 2) Unknown with the appropriate substrata within the 30m depth contour
 
@@ -17,11 +17,7 @@
 # B. Packages/Libraries
 library(sf)
 library(dplyr)
-library(raster)
-library(terra)
-library(tidyr)
 library(mapview)
-library(stringr)
 
 #==========================================================================================================#
 # C. Data
@@ -37,7 +33,7 @@ unknown_swath <- st_read("scratch_data/shapefiles/nccos_oahu_unknown_swath_large
 contour_30m <- st_read("scratch_data/shapefiles/MHI_bathy_HMRGv19filled_30mContour_JoeyLecky/MHI_bathy_HMRGv19filled_30mContour.shp")
 benthic_habitat_rev <- st_read("scratch_data/geopackage/power_analysis_scratch.gpkg", layer = "1_NCCOS_Hab_AllMHI_Edits_10_MDJRUnknowns")
 
-oahu_sites_v1.1 <- st_read("output_data/Oahu_Sites_v1.1_2026.gpkg", layer = "oahu_sites")
+oahu_sites_v1.1 <- st_read("raw_data/Oahu_Sites_v1.1_2026.gpkg", layer = "oahu_sites")
 
 #==========================================================================================================#
 # Part I: Prep --------------------------------------------------------------------------
@@ -94,8 +90,8 @@ oahu_classes_unknown_siteInfo_groups <- oahu_classes_unknown_siteInfo %>%
   group_by(site_name, site_code, site_label, combined_class) %>%
   summarise(geometry = st_union(geom), .groups = "drop") %>%
   st_make_valid() %>%
-  st_cast("MULTIPOLYGON") %>%                  # then standardize
-  mutate(area_m2  = as.numeric(st_area(.)))          # square meters
+  st_cast("MULTIPOLYGON") %>%                                      # then standardize
+  mutate(area_m2  = as.numeric(st_area(.)))                        # square meters
 table(st_geometry_type(oahu_classes_unknown_siteInfo_groups))
 
 ## 2.07
